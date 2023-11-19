@@ -262,33 +262,34 @@ public:
         
         bigint condition = 0;
         bigint m1 = 0, m2 = 0, m3 = 0, m4 = 0, m5 = 0, m6 = 0, u1, u2, u3, u4, u5, u6,v1,v2, v3, v4, v5, v6, w1, w2, w3, w4, w5, w6, uv1, uv2, uv3, uv4, uv5, uv6;
-        for(int k = 0, j= 0 ; k < j; ++k){
-            bigint q0 = 1;
-            bigint q1 = 3*q0 -bigint("1");
-            q0 = q1;
+        bigint q0 = 1;
+        for(int k = 0, j= 1 ; k < j; ++k){
+            
             m1 = bigint::_big_pow(bigint("2"), bigint("6")*q0-bigint("1"))-bigint("1");
             m2 = bigint::_big_pow(bigint("2"), bigint("6")*q0+bigint("1"))-bigint("1");
             m3 = bigint::_big_pow(bigint("2"), bigint("6")*q0+bigint("2"))-bigint("1");
             m4 = bigint::_big_pow(bigint("2"), bigint("6")*q0+bigint("3"))-bigint("1");
-            m5 = bigint::_big_pow(bigint("2"), bigint("6")*q0+bigint("4"))-bigint("1");
-            m6 = bigint::_big_pow(bigint("2"), bigint("6")*q0+bigint("5"))-bigint("1");
-            bigint arr_arr [2] = {num1, num2};
-            bigint* arr_m [6] = {&m1, &m2, &m3, &m4, &m5, &m6};
-            for(int i = 0; i < 2; ++i){
-                for(int j = 0; j < 6; ++j){
-                    if(arr_arr[i] < *arr_m[j]){
-                        cout << 1;
-                        break;
+            m5 = bigint::_big_pow(bigint("2"), bigint("6")*q0+bigint("5"))-bigint("1");
+            m6 = bigint::_big_pow(bigint("2"), bigint("6")*q0+bigint("7"))-bigint("1");
+            bigint q1 = 3*q0 -bigint("1");
+            q0 = q1;
+            
+                if( (bigint::_big_log2(num1) + bigint::_big_log2(num2) ) <  bigint::_big_log2(m1) + bigint::_big_log2(m2) + bigint::_big_log2(m3) + bigint::_big_log2(m4)+ bigint::_big_log2(m5) +bigint::_big_log2(m6)){
+                        condition = bigint(2);
+                       
                     }else{
-                        condition = 1;
+                        condition = bigint(1);
                     }
                     
-                }
+                
                 if(condition == bigint(1)){
+                    cout << +1 << endl;
                     j+= 1;
-                    break;
+                    
                 }
-            }
+            
+            if(condition == bigint(2)) break;
+        
         }
         u1 = num1%m1;
         u2 = num1%m2;
@@ -296,8 +297,7 @@ public:
         u4 = num1%m4;
         u5 = num1%m5;
         u6 = num1%m6;
-        
-        
+                
         
         v1 = num2%m1;
         v2 = num2%m2;
@@ -306,6 +306,7 @@ public:
         v5 = num2%m5;
         v6 = num2%m6;
         
+
         uv1 = v1*u1;
         uv2 = v2*u2;
         uv3 = v3*u3;
@@ -320,12 +321,14 @@ public:
         w5 = uv5%m5;
         w6 = uv6%m6;
         bigint freak = w4+m4;
+        
         while (true){
-            freak += m4;
-            if(freak % m1 == w1 && freak % m2 == w2 && freak % m3 == w3 && freak % m4 == w4 && freak % m5 == w5 && freak % m6 == w6){
-                break;
-            }
-        }
+                    freak += m4;
+                    if(freak % m1 == w1 && freak % m2 == w2 && freak % m3 == w3 && freak % m4 == w4 && freak % m5 == w5 && freak % m6 == w6){
+                        break;
+                    }
+                }
+        
         return freak;
     }
     
@@ -360,7 +363,6 @@ protected:
             t/=2;
             *counter+=1;
         }
-        
         return binary_form;
     }
     string move_left(bigint num){
@@ -372,7 +374,7 @@ protected:
     string shift(string num, long long dot_pos){
         string moved_string = num;
         size_t dotPos1 = num.find('.');
-        if(dotPos1 == std::string::npos){
+        if(dotPos1 == string::npos){
             num = binary_floor(num, 0);
             dotPos1 = num.length()  - 1;
         }
@@ -387,7 +389,7 @@ protected:
     string binary_floor(string binary1, long long k){
         string subString = "";
         size_t dotPos1 = binary1.find('.');
-        if(dotPos1 == std::string::npos){
+        if(dotPos1 == string::npos){
             binary1 += ".";
             dotPos1 = binary1.length()  - 1;
             
@@ -448,6 +450,7 @@ protected:
             max++;
         }
     }
+    
     };
 
     class inversed_Cook: protected BigDivision{
@@ -468,15 +471,12 @@ protected:
             while(to_bigint(static_cast<int>(pow(2, k))) < counter){
                 bigint vk_nom  =num ;
                 bigint vk_denom = bigint::_big_pow(bigint(2), bigint(counter));
-//                simplify_fraction(vk_nom, vk_denom);
                 bigint z2_nom = z_nom*z_nom;
                 bigint z2_denom = z_denom*z_denom;
-//                simplify_fraction(z2_nom, z2_denom);
                 
                 bigint multiplication_nom = z2_nom * vk_nom;
                 
                 bigint multiplication_denom = vk_denom * z2_denom;
-//                simplify_fraction(multiplication_nom, multiplication_denom);
                 
                 
                 bigint common_denom = find_common_denominator(multiplication_denom, z_denom);
@@ -488,10 +488,8 @@ protected:
                 
                 bigint z_times2_nom = z_nom * bigint(2)*multiplier2;
                 bigint z_times2_denom = common_denom;
-//                simplify_fraction_to_denominator(z_times2_nom, z_times2_denom, multiplication_denom);
                 z_nom = z_times2_nom - multiplication_nom;
                 z_denom = multiplication_denom;
-//                simplify_fraction(z_nom, z_denom);
                 binar_fraction =  fraction_to_binary(z_nom, z_denom);
                 size_t dotPos1 = binar_fraction.find('.');
                 for(size_t i =  dotPos1+1 + pow(2, k+1)   + 1; i < static_cast<long>(binar_fraction.length()); ++i){
@@ -506,7 +504,17 @@ protected:
                 }
             return make_tuple(binar_fraction, counter);
         }
-        
+        static string shift_left(string num, int shiftCount) {
+            size_t dotPos1 = num.find('.');
+            string zeroes = "";
+            for(int i =0; i < shiftCount; ++i){
+                zeroes += "0";
+            }
+            num.erase(dotPos1, 1);
+            num.insert(0, zeroes);
+            num.insert(1, ".");
+            return num;
+        }
     };
     
     class Cook: public BigDivision {
@@ -668,8 +676,9 @@ protected:
                 }
                 
             }
-            cout << "input accuracy: ";
+            cout << "input number of tests: ";
             cin >> k;
+            cout << "1 means prime, 0 means composite" << endl;
             return calculate_probability(num, k);
             
         }
@@ -698,7 +707,7 @@ protected:
         double input(){
             long long p = 0;
             while (p == 0) {
-                cout << "input odd number and is power of two: ";
+                cout << "input odd number and this number +1 is power of two: ";
                 cin >> p;
                 if(!odd(p)){
                     p = 0;
@@ -708,7 +717,7 @@ protected:
                 }
                 
             }
-            
+            cout << "1 means prime, 0 means composite" << endl;
             return calculate_probability(p);
             
         }
@@ -740,33 +749,35 @@ protected:
                 
                 
             }
-            cout << "input accuracy: ";
+            cout << "input number of tests: ";
             cin >> k;
+            cout << "1 means prime, 0 means composite" << endl;
             return calculate_probability(p, k);
             
         }
-        double calculate_probability(long long p, long long k){
+        double calculate_probability(long long p, bigint k){
             
-            int s = 0;
-            long long m = p -1, t = m;
-            while (t % 2 == 0) {
+            bigint s = 0;
+            bigint m = p -bigint(1), t = m;
+            while (t % bigint(2) == bigint(0)) {
                 t /= 2;
                 s++;
             }
-            long long d = m/pow(2, s);
+            bigint d = m/big_pow(bigint(2), s) ;
             for (int j = 0; j < k; ++j) {
                 long long a = rand() % (p-3) + 2;
-                long long x = static_cast<long>(pow(a, d))%p;
-                long long y= 0;
+                bigint big_a = to_bigint(a);
+                bigint x = big_pow(big_a, d)%m-bigint(1);
+                bigint y= 0;
                 for (int i = 0; i < s; ++i){
-                    y = (x*x)%p;
-                    if(y == 1 && x != 1 && x != (m)){
-                        cout << "в первом" << endl;
+                    y = (x*x)%m-bigint(1);
+                    if(y == bigint(1) && x != bigint(1) && x != m){
+                        
                         return 0;
                     }
                     x = y;
                 }
-                if( y != 1) return 0;
+                if( y != bigint(1)) return 0;
             }
             return 1;
             
@@ -792,6 +803,7 @@ protected:
                     }
                     Caracuba caracuba_method;
                     cout << caracuba_method.calculate(num1, num2) << endl;
+                    cout << caracuba_method.direct_multiplying(num1, num2) << endl;
                     break;
                 }
                 case 2:{
@@ -823,7 +835,7 @@ protected:
                         cin >> num2;
                     }
                     Schonhage shonhage_method;
-//                    cout << shonhage_method.calculate(a, b) << endl;
+                    cout << shonhage_method.calculate(num1, num2) << endl;
                     cout << shonhage_method.direct_multiplying(num1, num2) << endl;
                     break;
                 }
@@ -840,7 +852,7 @@ protected:
                         cin >> num2;
                     }
                     Strassen strassen_method;
-//                    cout << strassen_method.calculate(a, b) << endl;
+                    cout << strassen_method.calculate(num1, num2) << endl;
                     cout << strassen_method.direct_multiplying(num1, num2) << endl;
                     break;
                 }
@@ -853,7 +865,8 @@ protected:
                         cin >> num;
                     }
                     inversed_Cook inversed_cook(num);
-                    cout << get<0>(inversed_cook.calculate()) << endl;
+                    tuple<string, bigint> tup = (inversed_cook.calculate());
+                    cout << inversed_Cook::shift_left (get<0>(tup), stoi(get<1>(tup).str)) << endl;
                     break;
                 }
                 case 6:
